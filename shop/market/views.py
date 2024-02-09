@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import request
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
-from .models import Product, Category
-from .forms import ProductForm
+from .models import Product, Category, ProductImage
+from .forms import ProductForm, ProductImageForm
 from django.db.models import Q
 from .models import CartItem, FavoriteItem
+from django.forms import modelformset_factory
 
 
 class ProductListView(ListView):
@@ -23,20 +24,20 @@ class ProductCreateView(CreateView):
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect('/account')
+        return redirect('/')
     else:
-        return render(request, 'index.html')
+        return render(request, 'main_page.html')
 
 
 def main_page(request):
     category_id = request.GET.get('category_id', None)
     categories = Category.objects.all()
-    products = None
     if category_id:
-        products = Product.objects.filter(category_id=category_id)
+        products = Product.objects.filter(category_id=category_id).order_by('-created_at')
     else:
-        products = Product.objects.all()
+        products = Product.objects.all().order_by('-created_at')
     return render(request, 'main_page.html', {'products': products, 'categories': categories})
+
 
 
 def account(request):
@@ -46,32 +47,45 @@ def account(request):
 
 def upload_product(request):
     categories = Category.objects.all()
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Создайте новый объект товара и заполните его данными из формы
-            new_product = Product(
-                image=form.cleaned_data['image'],
-                name=form.cleaned_data['name'],
-                description=form.cleaned_data['description'],
-                manufacturer=form.cleaned_data['manufacturer'],
-                warranty=form.cleaned_data['warranty'],
-                price=form.cleaned_data['price'],
-                category_id=form.cleaned_data['category_id']
-            )
-            # Сохраните товар в базе данных
-            new_product.save()
-            # Здесь также можете выполнить дополнительные действия, например, перенаправление на страницу успеха
-            return redirect('main_page')
+    ImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=5)
 
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        formset = ImageFormSet(request.POST, request.FILES)
+
+        category_id = request.POST.get('category')
+        category = None
+
+        try:
+            category = Category.objects.get(id=category_id)
+        except Category.DoesNotExist:
+            pass
+
+        if category:
+            if form.is_valid() and formset.is_valid():
+                new_product = form.save(commit=False)
+                new_product.category = category
+                new_product.save()
+
+                for form in formset.cleaned_data:
+                    image = form.get('image')
+                    if image:
+                        ProductImage.objects.create(product=new_product, image=image)
+
+                return redirect(reverse_lazy('main_page'))
+        else:
+            return render(request, 'upload_product.html', {'form': form, 'formset': formset, 'categories': categories, 'error_message': 'No categories found. Please add categories first.'})
     else:
         form = ProductForm()
-    return render(request, 'upload_product.html', {'form': form, 'categories': categories})
+        formset = ImageFormSet(queryset=ProductImage.objects.none())
+
+    return render(request, 'upload_product.html', {'form': form, 'formset': formset, 'categories': categories})
 
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    return render(request, 'product_detail.html', {'product': product})
+    images = ProductImage.objects.filter(product=product)
+    return render(request, 'product_detail.html', {'product': product, 'images': images})
 
 
 def search_product(request):

@@ -10,7 +10,7 @@ app_name = 'market'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
+    path('', views.main_page, name='main_page'),
     path('main_page/', views.main_page, name='main_page'),
     path('register/', views_auth.registration, name='register'),
     path('login/', views_auth.login_view, name='login'),

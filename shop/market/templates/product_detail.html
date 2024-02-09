@@ -1,37 +1,62 @@
     {% extends 'base.html' %}
     {% block content %}
 
-    <style>
-        .container-detail{
-        display: block;
-        margin-left: auto;
-        margin-right: auto }
-    </style>
-<div class="container">
     <br>
     <a class="a-search-back" href="{% url 'main_page' %}" style="margin-left: 20px;"><i class='bx bx-left-arrow-alt'></i> На главную</a>
     <br>
     <br>
     <center>
-    <div class="card-detail">
-        <div class="container-detail" id="container-detail">
-            <div class="img-detail-container">
-                    <img src="{{ product.image.url }}" class="img-detail" alt="{{ product.name }}">
+            <div class="div-pad-det">
+              <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-5" id="row-detail">
+                <div class="col">
+                  <div id="carouselExampleDark" class="carousel slide">
+                    <div class="carousel-indicators">
+                      {% for image in images %}
+                      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+                      {% endfor %}
+                    </div>
+                    <div class="carousel-inner">
+                      {% for image in images %}
+                      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ image.image.url }}" id="detail_img" alt="{{ image.alt }}">
+                      </div>
+                      {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="text-detail">
+                    <h5 class="card-title-detail">{{ product.name }}</h5>
+                    <p class="stars-detail"><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i></p>
+                    <hr>
+                    <p class="card-text-detail">Цена: <strong>{{ product.price }}</strong> KZT</p>
+                    <p class="card-text-detail">Гарантия: {{ product.warranty }}</p>
+                    <p class="card-text-detail">Производитель: <span class="font-weight-bold">{{ product.manufacturer }}</span></p>
+                    <strong class="card-text-detail">Описание:</strong>
+                    <p class="card-text-detail">{{ product.description }}</p> 
+                    {% if user.is_authenticated %}
+                      <a href="{% url 'add_to_cart' product.id %}" class="btn" style="background-color: #1059a7; color: white; display: flex; align-items: center; justify-content: center;"><i class='bx bx-cart-add' ></i><span style="font-size: 13px;">Добавить</span></a>
+                    {% else %}
+                    <div class="alert alert-light" role="alert">
+                      Чтобы добавить этот товар в корзину, нужно авторизоваться!
+                    </div>
+                    {% endif %}
+                </div>
+                </div>
+              </div>
             </div>
-            <div class="text-detail">
-                <h5 class="card-title-deatil">{{ product.name }}</h5>
-                <p class="stars-detail"><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i></p>
-                <div class="detail-underline"></div>
-                <p class="card-text-detail">Цена: <strong>{{ product.price }}</strong> KZT</p>
-                <p class="card-text-detail">Гарантия: {{ product.warranty }}</p>
-                <p class="card-text-detail">Производитель: <span class="font-weight-bold">{{ product.manufacturer }}</span></p>
-                <strong class="card-text-detail">Описание:</strong>
-                <p class="card-text-detail">{{ product.description }}</p>
-                <a href="{% url 'add_to_cart' product.id %}" class="btn" style="background-color: #1059a7; color: white; display: flex; align-items: center; justify-content: center;"><i class='bx bx-cart-add' ></i><span style="font-size: 13px;">Добавить</span></a>
-            </div>
-        </div>
-    </div>
     </center>
-</div>
+
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+M5TmAUY6Zm9vXnEJz3MIV6/CmZ6U7o+Ibeb4yI" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha384-c5N8sy0v2/soQ6g6S8eG85Bt9aGwnF/xHR+MR5iSiE2tq5jF5KUpJr7Qf+2JhH1p" crossorigin="anonymous"></script>
+
 
     {% endblock %}

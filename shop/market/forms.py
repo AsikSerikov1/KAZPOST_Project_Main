@@ -1,13 +1,15 @@
 from django import forms
+from .models import Product, ProductImage
 
 
-class ProductForm(forms.Form):
-    image = forms.ImageField()
-    name = forms.CharField(max_length=100)
-    description = forms.CharField(widget=forms.Textarea)
-    manufacturer = forms.CharField(max_length=100)
-    warranty = forms.CharField(max_length=100)
-    price = forms.DecimalField(max_digits=10, decimal_places=2)
-    category_id = forms.IntegerField(required=True, min_value=1)
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'manufacturer', 'warranty', 'price', 'category']
 
+
+class ProductImageForm(forms.ModelForm):
+    class Meta:
+        model = ProductImage
+        fields = ['image']
 

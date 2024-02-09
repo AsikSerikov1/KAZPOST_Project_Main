@@ -1,116 +1,60 @@
-.product-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  
-  .product-item {
-    flex: 0 0 calc(50% - 10px);
-  }
-  
-  .card {
-    border: 1px solid rgba(193, 193, 193, 0.338);
-    border-radius: 10px;
-    margin: 5px;
-    width: 100%; 
-    box-sizing: border-box;
-  }
-  
-  .card-img{
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .card_text{
-    font-size: 20px;
-    font-weight: 400;
-    text-decoration: none;
-    color: black;
-}
-
-#btn-i{
-    font-size: 18px;
-}
-
-.img-detail-container{
-    margin-right: 110px;
-}
-
-.img-detail{
-    width: 400px;
-    height: 400px;
-    object-fit: cover;
-    border-right: 2px solid lightgray;
-}
-
 #container-detail{
     display: flex; 
     align-items: center; 
-    justify-content: center;
     text-align: left;
 }
 
 .card-detail{
-    border: 1px solid lightgray;
+    border: 1px solid rgb(0, 0, 0);
     border-radius: 5px;
     padding: 20px;
-}
-
-.detail-underline{
-    border-bottom: 2px solid lightgray;
 }
 
 .stars-detail{
     color: #1059a7;
 }
 
+#detail_img{
+  width: 600px;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.text-detail{
+  text-align: left;
+}
+
+#row-detail{
+  display: flex;
+  align-items: center;
+}
+
+.div-pad-det{
+  padding: 0 30px;
+}
+
+
+
 @media screen and (max-width: 900px) {
-    .img-detail-container{
-        margin-right: 10px;
-    }
+  #detail_img{
+    width: 400px;
+  }
+  #container-detail{
+    display: flex; 
+    align-items: center; 
+    text-align: left;
+    flex-direction: column;
+}
+.text-detail{
+  padding-left: 0;
+  padding-top: 15px;
+}
+
 }
   
   @media screen and (max-width: 700px) {
-    .product-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .product-item {
-      flex: none;
-      width: 100%;
-    }
-    .card-img{
-      width: 90px;
-      height: 90px;
-      object-fit: cover;
-    }
-    .card_text{
-        font-size: 12px;
-    }
-    #btn-i{
-        font-size: 10px;
-    }
-    #container-detail{
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        flex-direction: column;
-        text-align: left;
-    }
-    .text-detail{
-        margin-top: 20px;
-    }
-    .img-detail{
-        width: 200px;
-        height: 200px;
-        object-fit: cover;
-        border-right: none;
-    }
-    .img-detail-container{
-        margin-right: 0;
-    }
+
   }  
+  
   

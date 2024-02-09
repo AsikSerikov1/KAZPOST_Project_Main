@@ -11,13 +11,21 @@
         <div class="border-1">
             <br>
             <br>
-            <center>
-                <div class="container-categoryes">
-                    {% for category in categories %}
-                        <a class="nav-link active" id="nav-link" aria-current="page" href="/main_page?category_id={{category.id}}" style="color: black;">{{category.name}}</a>
-                    {% endfor %}
-                </div>
-            </center>
+
+            <div class="form-group">
+                <label style="padding-bottom: 10px; color: black; font-size: 20px;  " for="categorySelect">Категорий</label>
+                <select class="form-control" id="categorySelect" onchange="location = this.value;">
+                  <option style="color: black;" value="">- Выбрать -</option>
+                  <option value="/">На главную</option>
+                  {% for category in categories %}
+                  <option value="/main_page?category_id={{ category.id }}">{{ category.name }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+            
+            <br>
+            <br>
+
             {% if user.is_staff %}
             <br>
                 <div class="col-12 mb-4">
@@ -26,36 +34,37 @@
                 <br>
             {% endif %}
             <div class="row">
-                <br>
-                    <div class="product-container row">
-                        {% for product in products %}
-                                <div class="col-md-4 col-12">
-                                <a href="{% url 'product_detail' product.id %}" style="text-decoration: none;">
-                                    <div class="product-item">
-                                        <div class="card card-flex" style="display: flex; align-items: center; flex-direction: row; padding: 5px 10px;">
-                                            <div>
-                                                <center>
-                                                <img src="{{ product.image.url }}" class="card-img" alt="{{ product.name }}">
-                                                </center>
-                                            </div>
-                                            <div class="card-body" style="text-align: left;">
-                                                <h5 class="card_text" id="card-text-name">{{ product.name }}</h5>
-                                                <p><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i></p>
-                                                <p class="card_text" style="font-size: 15px;">  <strong>{{ product.price }}</strong> KZT</p>
-                                                <p class="card_text" style="color: gray; font-size: 14px;">{{ product.category.name }}</p> {# Выводим название категории #}
-                                                <a class="btn btn-dark" id="btn-i" href="{% url 'add_to_cart' product.id %}">
-                                                    <i class='bx bx-cart'></i>
-                                                </a>
-                                                <a href="{% url 'add_to_favorite' product.id %}" class="btn btn-dark" id="btn-i">
-                                                    <i class='bx bx-like'></i>
-                                                </a>
-                                            </div>
-                                        </div>
+                {% for product in products %}
+                <div class="col-12 col-md-4 col-lg-2">
+                    <a href="{% url 'product_detail' product.id %}" style="text-decoration: none;">
+                        <div class="card">
+                            <img src="{% if product.images.all %}{{ product.images.all.first.image.url }}{% endif %}" class="card-img-top" alt="{{ product.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.price }} KZT</p>
+                                <p class="card-category">
+                                    Категория: 
+                                    {{ product.category.name }}</p>
+                                    {% if user.is_authenticated %}
+                                    <a href="{% url 'add_to_cart' product.id %}" class="btn" style="background-color: #1059a7; color: white; display: flex; align-items: center; justify-content: center;"><i class='bx bx-cart-add' ></i><span style="font-size: 13px;">Добавить</span></a>
+                                    {% else %}
+                                    <div class="alert" style="font-size: 14px; color: rgb(138, 138, 138);" role="alert">
+                                    Необходима авторизация!
                                     </div>
-                                    </a>
-                                </div>
-                        {% endfor %}
-                    </div>
+                                    {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
             </div>
         </div>
+        
+        <script>
+            document.getElementById('categorySelect').addEventListener('change', function() {
+                var value = this.value;
+                if (value) window.location.href = value;
+                });
+        </script>
+
 {% endblock %}

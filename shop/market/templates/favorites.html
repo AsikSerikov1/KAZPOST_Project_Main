@@ -14,7 +14,7 @@
           <div class="card">
             <br>
             <center>
-              <img src="{{ item.product.image.url }}" class="card-img-top" alt="{{ item.product.name }}" style="width: 200px; height: 200px; object-fit: cover;">
+              <img src="{% if item.product.images.all %}{{ item.product.images.all.first.image.url }}{% endif %}" class="card-img-top" alt="{{ item.product.name }}" style="width: 200px; height: 200px; object-fit: cover;">
             </center>
                 <div class="card-body">
                   <h5 class="card-title">{{ item.product.name }}</h5>
