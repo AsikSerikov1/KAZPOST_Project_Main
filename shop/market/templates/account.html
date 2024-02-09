@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+    <h3>Личный кабинет</h3>
+    <br>
+    <a class="a-search-back" href="{% url 'main_page' %}"><i class='bx bx-left-arrow-alt' ></i>К товарам</a>
+    <br>
+<div class="row" style="display: flex; align-items: center; justify-content: center;">
+    <div class="col">
+        <center>
+            <div style="padding: 20px 0;">
+                <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" alt="" style="width: 300px;">
+            </div>
+        </center>
+    </div>
+    <div class="col">
+        <div style="background-color: rgb(0, 0, 0); padding: 20px; display: flex; align-items: center; justify-content: center; border-radius: 20px 20px 0 0;">
+            <h2 style="color: white;">
+                {% if user.is_staff %}
+                    Бизнес партнер
+                {% else %}
+                    Покупатель
+                {% endif %}
+            </h2>
+        </div>
+        <div style="background-color: rgb(255, 255, 255); border: 1px solid rgba(128, 128, 128, 0.148); border-radius: 0 0 20px 20px; padding: 20px;">
+                <div class="col">
+                    {% if user.is_staff %}
+                        <p style="font-size: 23px; color: rgb(0, 0, 0);">Добро пожаловать,<strong> бизнес партнер!</strong></p>
+                    {% else %}
+                        <p style="font-size: 23px; color: rgb(0, 0, 0);">Добро пожаловать, <strong>{{ user.first_name }}</strong>!</p>
+                    {% endif %}
+                <p>Статус пользователя:
+                    {% if user.is_staff %}
+                        <strong>Бизнес партнер</strong>
+                    {% else %}
+                        <strong>Покупатель</strong> 
+                    {% endif %}
+                </p>
+                    <a class="btn btn-dark" href="/logout">Выйти</a>
+                </div>
+        </div>
+    </div>
+</div>
+    {% endblock %}

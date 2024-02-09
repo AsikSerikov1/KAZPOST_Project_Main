@@ -1,0 +1,37 @@
+    {% extends 'base.html' %}
+    {% block content %}
+
+    <style>
+        .container-detail{
+        display: block;
+        margin-left: auto;
+        margin-right: auto }
+    </style>
+<div class="container">
+    <br>
+    <a class="a-search-back" href="{% url 'main_page' %}" style="margin-left: 20px;"><i class='bx bx-left-arrow-alt'></i> На главную</a>
+    <br>
+    <br>
+    <center>
+    <div class="card-detail">
+        <div class="container-detail" id="container-detail">
+            <div class="img-detail-container">
+                    <img src="{{ product.image.url }}" class="img-detail" alt="{{ product.name }}">
+            </div>
+            <div class="text-detail">
+                <h5 class="card-title-deatil">{{ product.name }}</h5>
+                <p class="stars-detail"><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i></p>
+                <div class="detail-underline"></div>
+                <p class="card-text-detail">Цена: <strong>{{ product.price }}</strong> KZT</p>
+                <p class="card-text-detail">Гарантия: {{ product.warranty }}</p>
+                <p class="card-text-detail">Производитель: <span class="font-weight-bold">{{ product.manufacturer }}</span></p>
+                <strong class="card-text-detail">Описание:</strong>
+                <p class="card-text-detail">{{ product.description }}</p>
+                <a href="{% url 'add_to_cart' product.id %}" class="btn" style="background-color: #1059a7; color: white; display: flex; align-items: center; justify-content: center;"><i class='bx bx-cart-add' ></i><span style="font-size: 13px;">Добавить</span></a>
+            </div>
+        </div>
+    </div>
+    </center>
+</div>
+
+    {% endblock %}
